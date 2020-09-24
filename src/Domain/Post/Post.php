@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Domain\Post;
+
+use App\Infrastructure\Entity\{Entity, EntityId};
+
+class Post extends Entity
+{
+    protected string $title;
+
+    protected array $fields = ['id', 'title'];
+
+    public function __construct(EntityId $id, string $title)
+    {
+        parent::__construct($id);
+
+        $this->title = $title;
+    }
+}

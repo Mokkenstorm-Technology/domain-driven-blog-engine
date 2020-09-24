@@ -1,0 +1,6 @@
+parameters:
+    earlyTerminatingMethodCalls:
+        App\Infrastructure\Exception\ShouldNotHappen:
+            - throw
+        App\Infrastructure\Container\Resolvers\AbstractResolver:
+            - throw
