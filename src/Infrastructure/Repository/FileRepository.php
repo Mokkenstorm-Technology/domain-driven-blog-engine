@@ -18,6 +18,8 @@ use Traversable;
  */
 abstract class FileRepository implements Repository
 {
+    protected string $extension = '.json';
+
     protected string $location;
 
     /**
@@ -37,8 +39,10 @@ abstract class FileRepository implements Repository
      */
     public function all(): Traversable
     {
-        yield from $this->disk->files($this->location)
-                        ->map(fn (File $file) => $this->entityFromFile($file));
+        $filter = fn (File $file) : bool => (bool) preg_match("/$this->extension$/", $file->name());
+        $mapper = fn (File $file) => $this->entityFromFile($file);
+            
+        yield from $this->disk->files($this->location)->filter($filter)->map($mapper);
     }
 
     /**
