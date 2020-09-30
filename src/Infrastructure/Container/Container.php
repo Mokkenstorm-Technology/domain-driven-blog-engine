@@ -4,98 +4,97 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Container;
 
+use Closure;
+
 use ReflectionClass;
+use ReflectionType;
+use ReflectionNamedType;
+use ReflectionFunction;
 use ReflectionParameter;
 
-use App\Infrastructure\Container\Resolvers\{
-    ClassResolver,
-    FallbackResolver,
-    ResolverAggregate,
-    ResolvesDependencies
-};
+use App\Infrastructure\Support\Collection;
 
 class Container implements ContainerInterface
 {
     /**
-     * @var array<class-string, class-string>
+     * @var array<class-string, class-string | Closure> 
      */
     private array $bindings = [];
 
-    /**
-     * @var class-string<ResolvesDependencies>[]
-     */
-    protected static array $resolvers = [
-        ClassResolver::class, 
-        FallbackResolver::class, 
-    ]; 
-
     protected static Container $instance;
-
-    private ResolvesDependencies $resolver;
-
-    private function __construct(ResolvesDependencies $resolver)
-    {
-        $this->resolver = $resolver;
-    }
 
     public static function getInstance() : self
     {
-        return self::$instance ?? self::$instance = self::createInstance(); 
+        return self::$instance ??= new self;
     }
 
     /**
      * @template T
+     *
      * @param class-string<T> $target
      * @return T
      */
     public function make(string $target)
     {
-        $target = $this->getClassForTarget($target);
+        $target = $this->getBinding($target);
 
-        $args = array_reduce(
-            $this->getConstructorArguments($target),
-            fn (array $args, ReflectionParameter $param) : array =>
-                array_merge($args, [$this->resolver->resolve($param)]),
-            []
-        );
+        $reducer = function (array $args, ? ReflectionType $type) : array {
 
-        return new $target(...$args);
+            assert($type instanceof ReflectionNamedType); 
+
+            /**
+             * @var class-string | null
+             */
+            $name = $type->getName();
+
+            assert($name !== null); 
+            
+            return $args + [$this->make($name)];
+    
+        };
+
+        $args = $this->getConstructorArguments($target) 
+            ->map->getType()
+            ->reduce($reducer, []);
+
+        return is_string($target) ? new $target(...$args) : $target(...$args);
     }
 
     /**
-     * @param class-string $interface
-     * @param class-string $class
+     * @template T
+     *
+     * @param class-string<T> $interface
+     * @param class-string<T> | Closure(): T $class
      */
-    public function bind(string $interface, string $class): void
+    public function bind(string $interface, $class): void
     {
         $this->bindings[$interface] = $class;
     }
 
     /**
-     * @param class-string $class
-     * @return class-string
+     * @template T
+     *
+     * @param class-string<T> $class
+     * @return class-string<T> | Closure(): T $class
      */
-    private function getClassForTarget(string $class): string
+    private function getBinding(string $class)
     {
-        return $this->bindings[$class] ?? $class;
+        /**
+         * @var class-string<T> | Closure(): T
+         */
+        $binding = $this->bindings[$class] ?? $class;
+
+        return $binding;
     }
 
     /**
-     * @param class-string $class
-     * @return ReflectionParameter[]
+     * @param class-string | Closure $target 
+     * @return Collection<ReflectionParameter>
      */
-    private function getConstructorArguments(string $class): array
+    private function getConstructorArguments($target): Collection
     {
-        $constructor = (new ReflectionClass($class))->getConstructor();
+        $reflector = $target instanceof Closure ? new ReflectionFunction($target) : (new ReflectionClass($target))->getConstructor();
         
-        return $constructor !== null ? $constructor->getParameters() : [];
-    }
-
-    private static function createInstance() : self
-    {
-        return new self(new ResolverAggregate(...array_map(
-            fn (string $class): ResolvesDependencies => new $class,
-            self::$resolvers 
-        )));
+        return Collection::from($reflector !== null ? $reflector->getParameters() : []);
     }
 }

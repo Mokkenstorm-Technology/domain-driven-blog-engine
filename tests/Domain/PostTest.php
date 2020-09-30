@@ -3,11 +3,17 @@
 namespace Tests\Domain;
 
 use App\Domain\Post\{Post, PostFactory, PostRepository};
-use App\Infrastructure\{Entity\EntityId, Exception\NotFound};
+use App\Infrastructure\{Entity\EntityId, Exception\NotFound, Container\Container};
+use App\Infrastructure\App;
 
 beforeEach(function () {
-    $this->repository = new PostRepository;
-    $this->factory    = new PostFactory;
+
+    $this->app = (new App(Container::getInstance()));
+
+    $this->app->boot();
+
+    $this->repository = $this->app->make(PostRepository::class);
+    $this->factory    = $this->app->make(PostFactory::class);
 });
     
 it('should be able to create posts', function () {

@@ -4,3 +4,13 @@ parameters:
             - throw
         App\Infrastructure\Container\Resolvers\AbstractResolver:
             - throw
+services: 
+    -
+        class: Plugin\Extensions\CollectionExtension
+        tags:
+            - phpstan.broker.propertiesClassReflectionExtension
+    -
+        class: Plugin\Extensions\HigherOrderCollectionExtension
+        tags:
+            - phpstan.broker.methodsClassReflectionExtension
+            - phpstan.broker.propertiesClassReflectionExtension

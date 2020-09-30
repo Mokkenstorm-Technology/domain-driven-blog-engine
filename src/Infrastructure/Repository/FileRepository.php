@@ -5,6 +5,10 @@ namespace App\Infrastructure\Repository;
 use App\Infrastructure\Entity\{Entity, EntityId};
 
 use App\Infrastructure\Exception\NotFound;
+use App\Infrastructure\Support\Disk\Disk;
+use App\Infrastructure\Support\Disk\File;
+use App\Infrastructure\Support\Disk\FileAccessException;
+
 use ErrorException;
 use Traversable;
 
@@ -21,23 +25,20 @@ abstract class FileRepository implements Repository
      */
     protected string $entityClass;
 
+    protected Disk $disk;
+
+    public function __construct(Disk $disk)
+    {
+        $this->disk = $disk;
+    }
+
     /**
      * @return Traversable<T>
      */
     public function all(): Traversable
     {
-        foreach (new \DirectoryIterator($this->basePath()) as $file) {
-            /**
-             * @var string
-             */
-            $path = $file->getRealPath();
-
-            $entity = $this->entityFromFile($path);
-            
-            if ($entity !== null) {
-                yield $entity;
-            }
-        }
+        yield from $this->disk->files($this->location)
+                        ->map(fn (File $file) => $this->entityFromFile($file));
     }
 
     /**
@@ -45,11 +46,15 @@ abstract class FileRepository implements Repository
      */ 
     public function find(EntityId $id): Entity
     {
-        if (!$entity = $this->entityFromFile($this->getPath($id))) {
-            throw new NotFound; 
-        } 
-    
-        return $entity;
+        try {
+
+            return $this->entityFromFile($this->disk->file($this->file($id)));
+        
+        } catch (FileAccessException $e) {
+        
+            throw new NotFound;
+        
+        }
     }
 
     /**
@@ -57,42 +62,24 @@ abstract class FileRepository implements Repository
      */ 
     public function save(Entity $post): Entity
     {
-        file_put_contents($this->getPath($post->getId()), json_encode($post));
+        assert(($contents = json_encode($post)) !== false);
 
+        $this->disk->save($this->file($post->getId()), $contents);
+        
         return $this->find($post->getId());
     }
 
-    private function getPath(EntityId $id) : string
+    private function file(EntityId $id) : string
     {
-        return $this->basePath() . ((string) $id) . ".json";
-    }
-
-    private function basePath(): string
-    {
-        if (!is_dir($path = __DIR__ . '/../../../storage/' . $this->location . '/')) {
-            mkdir($path);
-        }
-        
-        return $path;
+        return $this->location . '/' . ((string) $id) . ".json";
     }
 
     /**
-     * @param string $path
-     * @return T | null
+     * @return T
      */
-    private function entityFromFile(string $path): ?Entity
+    private function entityFromFile(File $file): Entity
     {
-        try {
-            $data = file_get_contents($path);
-        } catch (ErrorException $e) {
-            return null; 
-        }
-
-        if ($data === false) {
-            return null;
-        }
-
-        $data = json_decode($data, true);
+        $data = json_decode($file->content(), true);
 
         $class = $this->entityClass;
 

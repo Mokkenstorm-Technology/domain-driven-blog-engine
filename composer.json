@@ -17,14 +17,19 @@
         "test:types": "php vendor/bin/phpstan analyze ./src --level=max",
         "test:domain": "vendor/bin/pest --group=domain",
         "test:coverage": "vendor/bin/pest --coverage --min=90",
+        "test:plugin": "vendor/bin/phpunit --testsuite=Plugin",
         "test:unit": "vendor/bin/pest --group=unit",
         "test" : [
+            "@test:plugin",
             "@test:types",
             "@test:coverage"
         ]
     },
+    "prefer-stable": true,
+    "minimum-stability": "dev",
     "require": {
-        "php": "^7.4.0" 
+        "php": "^7.4.0",
+        "league/flysystem": "2.*"
     },
     "autoload": {
         "psr-4": {
@@ -33,7 +38,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Plugin\\": "plugin/"
         }
     }
 }

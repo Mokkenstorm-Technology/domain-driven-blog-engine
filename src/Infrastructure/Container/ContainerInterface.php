@@ -8,14 +8,17 @@ interface ContainerInterface
 {
     /**
      * @template T
+     *
      * @param class-string<T> $target
      * @return T
      */
     public function make(string $target);
 
     /**
-     * @param class-string $interface
-     * @param class-string $class
+     * @template T
+     * 
+     * @param class-string<T> $interface
+     * @param class-string<T> | callable(): T $class
      */
-    public function bind(string $interface, string $class): void;
+    public function bind(string $interface, $class): void;
 }
