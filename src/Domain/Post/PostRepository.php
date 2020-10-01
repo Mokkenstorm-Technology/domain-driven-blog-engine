@@ -14,5 +14,5 @@ class PostRepository extends FileRepository
     /**
      * @var class-string<Post>
      */
-    protected string $entityClass = Post::class; 
+    protected string $entityClass = Post::class;
 }

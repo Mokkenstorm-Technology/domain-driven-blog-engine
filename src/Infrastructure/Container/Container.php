@@ -17,7 +17,7 @@ use App\Infrastructure\Support\Collection;
 class Container implements ContainerInterface
 {
     /**
-     * @var array<class-string, class-string | Closure> 
+     * @var array<class-string, class-string | Closure>
      */
     private array $bindings = [];
 
@@ -39,21 +39,19 @@ class Container implements ContainerInterface
         $target = $this->getBinding($target);
 
         $reducer = function (array $args, ? ReflectionType $type) : array {
-
-            assert($type instanceof ReflectionNamedType); 
+            assert($type instanceof ReflectionNamedType);
 
             /**
              * @var class-string | null
              */
             $name = $type->getName();
 
-            assert($name !== null); 
+            assert($name !== null);
             
             return $args + [$this->make($name)];
-    
         };
 
-        $args = $this->getConstructorArguments($target) 
+        $args = $this->getConstructorArguments($target)
             ->map->getType()
             ->reduce($reducer, []);
 
@@ -88,7 +86,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @param class-string | Closure $target 
+     * @param class-string | Closure $target
      * @return Collection<ReflectionParameter>
      */
     private function getConstructorArguments($target): Collection

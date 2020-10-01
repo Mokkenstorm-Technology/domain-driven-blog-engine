@@ -2,7 +2,8 @@
 
 namespace App\Infrastructure\Repository;
 
-use App\Infrastructure\Entity\{Entity, EntityId};
+use App\Infrastructure\Entity\Entity;
+use App\Infrastructure\Entity\EntityId;
 
 use Traversable;
 
@@ -18,11 +19,11 @@ interface Repository
 
     /**
      * @return T
-     */ 
+     */
     public function find(EntityId $id);
 
     /**
      * @return T
-     */ 
+     */
     public function save(Entity $post);
 }

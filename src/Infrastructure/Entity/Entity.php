@@ -15,7 +15,7 @@ abstract class Entity implements JsonSerializable
 
     public function __construct(EntityId $id)
     {
-        $this->id = $id; 
+        $this->id = $id;
     }
 
     public function getId(): EntityId

@@ -16,7 +16,7 @@ interface ContainerInterface
 
     /**
      * @template T
-     * 
+     *
      * @param class-string<T> $interface
      * @param class-string<T> | callable(): T $class
      */

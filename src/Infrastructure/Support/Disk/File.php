@@ -10,7 +10,7 @@ class File
 
     public function __construct(string $path)
     {
-        $this->path = $path; 
+        $this->path = $path;
     }
     
     public function name(): string
@@ -25,11 +25,8 @@ class File
     public function content(): string
     {
         try {
-        
             $content = file_get_contents($this->path);
-        
         } catch (ErrorException $e) {
-
             throw new FileAccessException;
         }
 

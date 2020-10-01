@@ -28,7 +28,7 @@ class HigherOrderCollectionProxy
      */
     public function __get(string $name)
     {
-        return $this->collection->{$this->method}(fn ($e) => $e->$name); 
+        return $this->collection->{$this->method}(fn ($e) => $e->$name);
     }
 
     /**
@@ -37,6 +37,6 @@ class HigherOrderCollectionProxy
      */
     public function __call(string $method, array $arguments = []): Collection
     {
-        return $this->collection->{$this->method}(fn ($item) => $item->{$method}(...$arguments)); 
+        return $this->collection->{$this->method}(fn ($item) => $item->{$method}(...$arguments));
     }
 }

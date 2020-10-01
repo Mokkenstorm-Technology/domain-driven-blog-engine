@@ -2,10 +2,13 @@
 
 namespace App\Infrastructure\Repository;
 
-use App\Infrastructure\Entity\{Entity, EntityId};
+use App\Infrastructure\Entity\Entity;
+use App\Infrastructure\Entity\EntityId;
 
 use App\Infrastructure\Exception\NotFound;
-use App\Infrastructure\Support\Disk\{Disk, File, FileAccessException};
+use App\Infrastructure\Support\Disk\Disk;
+use App\Infrastructure\Support\Disk\File;
+use App\Infrastructure\Support\Disk\FileAccessException;
 
 use Traversable;
 
@@ -44,23 +47,19 @@ abstract class FileRepository implements Repository
 
     /**
      * @return T
-     */ 
+     */
     public function find(EntityId $id): Entity
     {
         try {
-
             return $this->entityFromFile($this->disk->file($this->file($id)));
-        
         } catch (FileAccessException $e) {
-        
             throw new NotFound;
-        
         }
     }
 
     /**
      * @return T
-     */ 
+     */
     public function save(Entity $post): Entity
     {
         assert(($contents = json_encode($post)) !== false);

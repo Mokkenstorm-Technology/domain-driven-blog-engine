@@ -2,9 +2,11 @@
 
 namespace App\Infrastructure;
 
-use App\Infrastructure\Providers\{DiskProvider, ServiceProvider};
+use App\Infrastructure\Providers\DiskProvider;
+use App\Infrastructure\Providers\ServiceProvider;
 
-use App\Infrastructure\{Container\ContainerInterface, Support\Collection};
+use App\Infrastructure\Container\ContainerInterface;
+use App\Infrastructure\Support\Collection;
 
 class App
 {
@@ -12,7 +14,7 @@ class App
      * @var class-string<ServiceProvider>[]
      */
     private array $providers = [
-        DiskProvider::class 
+        DiskProvider::class
     ];
 
     private ContainerInterface $container;
@@ -25,7 +27,7 @@ class App
     public function boot(): void
     {
         Collection::from($this->providers)
-            ->map(fn($e) : ServiceProvider => new $e)
+            ->map(fn ($e) : ServiceProvider => new $e)
             ->map->register($this->container)
             ->toArray();
     }
@@ -37,6 +39,6 @@ class App
      */
     public function make(string $target)
     {
-        return $this->container->make($target); 
+        return $this->container->make($target);
     }
 }

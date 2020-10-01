@@ -45,7 +45,7 @@ class Collection implements IteratorAggregate
     {
         $source = $this->source;
 
-        yield from (is_callable($source) ? $source() : $source); 
+        yield from (is_callable($source) ? $source() : $source);
     }
 
     /**
@@ -63,11 +63,11 @@ class Collection implements IteratorAggregate
      */
     public function map(callable $mapper): self
     {
-        return new self(function() use ($mapper) {
-            foreach($this as $index => $element) {
+        return new self(function () use ($mapper) {
+            foreach ($this as $index => $element) {
                 yield $mapper($element, $index);
             }
-        }); 
+        });
     }
 
     /**
@@ -76,18 +76,18 @@ class Collection implements IteratorAggregate
      */
     public function filter(callable $filter): self
     {
-        return new self(function() use ($filter) {
-            foreach($this as $index => $element) {
+        return new self(function () use ($filter) {
+            foreach ($this as $index => $element) {
                 if ($filter($element, $index)) {
-                    yield $element;        
+                    yield $element;
                 }
             }
-        }); 
+        });
     }
 
     /**
      * @template S
-     * 
+     *
      * @param callable(S, T, int | null ): S $reducer
      * @param S $initial
      * @return S

@@ -2,7 +2,8 @@
 
 namespace App\Domain\Post;
 
-use App\Infrastructure\Entity\{Entity, EntityId};
+use App\Infrastructure\Entity\Entity;
+use App\Infrastructure\Entity\EntityId;
 
 class Post extends Entity
 {

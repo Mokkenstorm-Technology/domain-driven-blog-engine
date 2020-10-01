@@ -2,7 +2,8 @@
 
 namespace App\Infrastructure\Support\Disk;
 
-use App\Infrastructure\Support\{Collection, Str};
+use App\Infrastructure\Support\Collection;
+use App\Infrastructure\Support\Str;
 
 use DirectoryIterator;
 
@@ -12,7 +13,7 @@ class LocalDisk implements Disk
 
     public function __construct(string $root)
     {
-        $this->root = rtrim($root , '/') . '/';
+        $this->root = rtrim($root, '/') . '/';
     }
 
     /**
@@ -34,7 +35,7 @@ class LocalDisk implements Disk
 
     public function save(string $path, string $content) : void
     {
-        file_put_contents($this->path($path), $content); 
+        file_put_contents($this->path($path), $content);
     }
 
     protected function path(string $path): string
