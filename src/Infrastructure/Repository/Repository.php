@@ -4,7 +4,6 @@ namespace App\Infrastructure\Repository;
 
 use App\Infrastructure\Entity\{Entity, EntityId};
 
-use RuntimeException;
 use Traversable;
 
 /**
