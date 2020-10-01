@@ -8,11 +8,11 @@ class Bar
 
     public function __construct(string $value = 'bar')
     {
-        $this->value = $value; 
+        $this->value = $value;
     }
 
     public function bar(): string
     {
-        return $this->value; 
+        return $this->value;
     }
 }

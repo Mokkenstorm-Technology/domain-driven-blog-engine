@@ -24,7 +24,7 @@ class PluginTest extends TestCase
     {
         $expectedErrors = [
             7 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, string>::bar().",
-            9 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, string>::bar()." 
+            9 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, string>::bar()."
         ];
 
         $actualErrors = array_reduce(
@@ -45,14 +45,15 @@ class PluginTest extends TestCase
         
         $command = escapeshellcmd(__DIR__.'/../../vendor/bin/phpstan');
 
-        $file = __DIR__ . '/Files/' . $file . '.php'; 
+        $file = __DIR__ . '/Files/' . $file . '.php';
 
-        $bootstrap = __DIR__ . '/Files/bootstrap.php'; 
+        $bootstrap = __DIR__ . '/Files/bootstrap.php';
 
         exec(
             sprintf(
                 '%s %s analyse --no-progress  --level=max --configuration %s  %s --error-format=%s',
-                escapeshellarg(PHP_BINARY), $command,
+                escapeshellarg(PHP_BINARY),
+                $command,
                 escapeshellarg($configPath),
                 escapeshellarg($file),
                 'json'

@@ -8,11 +8,11 @@ class Foo
 
     public function __construct(string $value = 'foo')
     {
-        $this->value = $value; 
+        $this->value = $value;
     }
 
     public function foo(): string
     {
-        return $this->value; 
+        return $this->value;
     }
 }

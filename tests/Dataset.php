@@ -16,7 +16,7 @@ class Dataset implements IteratorAggregate
 
     public static function from(array $data): self
     {
-        return new self($data); 
+        return new self($data);
     }
 
     public function parameter($parameter): self
@@ -47,6 +47,6 @@ class Dataset implements IteratorAggregate
 
     public function __call(string $method, array $parameters)
     {
-        return $this; 
+        return $this;
     }
 }

@@ -4,26 +4,26 @@ namespace Tests\Unit;
 
 use App\Infrastructure\Container\Container;
 
-beforeEach(fn() => $this->container = Container::getInstance());
+beforeEach(fn () => $this->container = Container::getInstance());
 
-it('should be able to resolve classes', fn () => 
+it(
+    'should be able to resolve classes',
+    fn () =>
 
     $this->assertInstanceOf(Foo::class, $this->container->make(Foo::class))
-
 );
 
-it('should be able to resolve classes with dependencies', fn () =>
+it(
+    'should be able to resolve classes with dependencies',
+    fn () =>
 
     $this->assertInstanceOf(Bar::class, $this->container->make(Bar::class))
-
 );
 
 it('should be able to resolve from interfaces', function () {
+    $this->container->bind(FooInterface::class, Bar::class);
 
-   $this->container->bind(FooInterface::class, Bar::class);
-
-   $this->assertInstanceOf(Bar::class, $this->container->make(FooInterface::class));
-
+    $this->assertInstanceOf(Bar::class, $this->container->make(FooInterface::class));
 });
 
 class Foo
