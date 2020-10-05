@@ -23,8 +23,8 @@ class PluginTest extends TestCase
     public function testInValidCases(): void
     {
         $expectedErrors = [
-            7 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, string>::bar().",
-            9 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, string>::bar()."
+            7 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, App\Infrastructure\Support\Collection<S>>::bar().",
+            9 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, App\Infrastructure\Support\Collection<S>>::bar()."
         ];
 
         $actualErrors = array_reduce(
@@ -51,7 +51,7 @@ class PluginTest extends TestCase
 
         exec(
             sprintf(
-                '%s %s analyse --no-progress  --level=max --configuration %s  %s --error-format=%s',
+                '%s %s analyse --no-progress  --level=max --configuration %s  %s --error-format=%s --debug',
                 escapeshellarg(PHP_BINARY),
                 $command,
                 escapeshellarg($configPath),
@@ -61,6 +61,6 @@ class PluginTest extends TestCase
             $jsonResult
         );
 
-        return json_decode($jsonResult[0], true)['files'][$file]['messages'] ?? [];
+        return json_decode($jsonResult[1], true)['files'][$file]['messages'] ?? [];
     }
 }

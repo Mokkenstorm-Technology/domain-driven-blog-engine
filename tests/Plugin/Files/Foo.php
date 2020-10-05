@@ -15,4 +15,9 @@ class Foo
     {
         return $this->value;
     }
+
+    public function baz(): string
+    {
+        return $this->value;
+    }
 }

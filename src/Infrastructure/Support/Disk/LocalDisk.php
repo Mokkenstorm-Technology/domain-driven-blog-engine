@@ -23,7 +23,7 @@ class LocalDisk implements Disk
     {
         $generator = fn () : DirectoryIterator => new DirectoryIterator($this->path($path));
 
-        return Collection::from($generator)->filter(fn (DirectoryIterator $file) : bool => $file->isFile())
+        return Collection::from($generator)->filter->isFile()
                                            ->map->getPathName()
                                            ->mapInto(File::class);
     }

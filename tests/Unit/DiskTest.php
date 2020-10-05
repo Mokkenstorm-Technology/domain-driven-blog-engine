@@ -19,14 +19,10 @@ it('should be able to open files', function () {
     unlink($path);
 });
 
-it(
-    'it should fail on unknown files',
-    fn () =>
+it('should fail on unknown files', fn () => (new File('foo'))->content())
+->throws(FileAccessException::class);
 
-    (new File('foo'))->content()
-)->throws(FileAccessException::class);
-
-it('it should fail on unknown files even with shitty warning config', function () {
+it('should fail on unknown files even with shitty warning config', function () {
     $settings = error_reporting(E_ERROR | E_PARSE);
 
     (new File('foo'))->content();

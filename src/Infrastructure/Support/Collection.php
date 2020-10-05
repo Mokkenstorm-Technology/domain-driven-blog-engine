@@ -113,12 +113,10 @@ class Collection implements IteratorAggregate
     }
 
     /**
-     * @return HigherOrderCollectionProxy<T>
+     * @return mixed
      */
-    public function __get(string $name): HigherOrderCollectionProxy
+    public function __get(string $name)
     {
-        assert(in_array($name, ['map', 'filter']));
-
         return new HigherOrderCollectionProxy($this, $name);
     }
 }

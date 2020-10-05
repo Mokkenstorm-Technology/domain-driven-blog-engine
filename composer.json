@@ -15,11 +15,11 @@
         }
     ],
     "scripts": {
-        "test:types": "php vendor/bin/phpstan analyze ./src --level=max",
+        "test:types": "php vendor/bin/phpstan analyze ./{src,plugin} --level=max",
         "test:lint": "php vendor/bin/php-cs-fixer fix",
         "test:domain": "vendor/bin/pest --group=domain",
         "test:coverage": "vendor/bin/pest --coverage --min=90",
-        "test:plugin": "vendor/bin/phpunit --testsuite=Plugin",
+        "test:plugin": "vendor/bin/phpunit --testsuite=Plugin --colors=always",
         "test:unit": "vendor/bin/pest --group=unit",
         "test" : [
             "@test:lint",

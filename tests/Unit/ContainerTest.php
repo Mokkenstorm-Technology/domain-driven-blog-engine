@@ -6,19 +6,13 @@ use App\Infrastructure\Container\Container;
 
 beforeEach(fn () => $this->container = Container::getInstance());
 
-it(
-    'should be able to resolve classes',
-    fn () =>
+it('should be able to resolve classes', function () {
+    $this->assertInstanceOf(Foo::class, $this->container->make(Foo::class));
+});
 
-    $this->assertInstanceOf(Foo::class, $this->container->make(Foo::class))
-);
-
-it(
-    'should be able to resolve classes with dependencies',
-    fn () =>
-
-    $this->assertInstanceOf(Bar::class, $this->container->make(Bar::class))
-);
+it('should be able to resolve classes with dependencies', function () {
+    $this->assertInstanceOf(Bar::class, $this->container->make(Bar::class));
+});
 
 it('should be able to resolve from interfaces', function () {
     $this->container->bind(FooInterface::class, Bar::class);

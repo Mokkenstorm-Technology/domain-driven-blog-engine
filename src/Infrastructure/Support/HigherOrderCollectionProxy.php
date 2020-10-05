@@ -4,6 +4,7 @@ namespace App\Infrastructure\Support;
 
 /**
  * @template T
+ * @template S
  */
 class HigherOrderCollectionProxy
 {
@@ -33,9 +34,9 @@ class HigherOrderCollectionProxy
 
     /**
      * @param mixed[] $arguments
-     * @return Collection<mixed>
+     * @return mixed
      */
-    public function __call(string $method, array $arguments = []): Collection
+    public function __call(string $method, array $arguments = [])
     {
         return $this->collection->{$this->method}(fn ($item) => $item->{$method}(...$arguments));
     }
