@@ -4,7 +4,10 @@ services:
         tags:
             - phpstan.broker.propertiesClassReflectionExtension
     -
-        class: Plugin\Extensions\HigherOrderCollectionExtension
+        class: Plugin\Extensions\HigherOrderCollectionMethodExtension
         tags:
             - phpstan.broker.methodsClassReflectionExtension
+    -
+        class: Plugin\Extensions\HigherOrderCollectionPropertyExtension
+        tags:
             - phpstan.broker.propertiesClassReflectionExtension
