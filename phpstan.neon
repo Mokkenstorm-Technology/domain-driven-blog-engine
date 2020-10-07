@@ -1,13 +1,6 @@
-services: 
-    -
-        class: Plugin\Extensions\CollectionExtension
-        tags:
-            - phpstan.broker.propertiesClassReflectionExtension
-    -
-        class: Plugin\Extensions\HigherOrderCollectionMethodExtension
-        tags:
-            - phpstan.broker.methodsClassReflectionExtension
-    -
-        class: Plugin\Extensions\HigherOrderCollectionPropertyExtension
-        tags:
-            - phpstan.broker.propertiesClassReflectionExtension
+includes:
+    - plugin/plugin.neon
+parameters:
+    higherOrderCollection:
+        collectionClass: App\Infrastructure\Support\Collection
+        proxyClass: App\Infrastructure\Support\HigherOrderCollectionProxy
