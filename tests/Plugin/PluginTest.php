@@ -11,20 +11,15 @@ class PluginTest extends TestCase
 {
     public function testValidCases(): void
     {
-        $results = $this->analyse('ValidCalls');
-
-        if ($results) {
-            $this->fail(sprintf("%s %s", $results[0]['line'], $results[0]['message']));
-        }
-
-        $this->assertEmpty($results);
+        $this->assertEmpty($this->analyse('ValidCalls'));
     }
 
     public function testInValidCases(): void
     {
         $expectedErrors = [
             7 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, App\Infrastructure\Support\Collection<S>>::bar().",
-            9 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, App\Infrastructure\Support\Collection<S>>::bar()."
+            9 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Foo, App\Infrastructure\Support\Collection<S>>::bar().",
+            11 => "Call to an undefined method App\Infrastructure\Support\HigherOrderCollectionProxy<Tests\Plugin\Files\Bar|Tests\Plugin\Files\Foo, App\Infrastructure\Support\Collection<S>>::bar()."
         ];
 
         $actualErrors = array_reduce(
@@ -32,8 +27,14 @@ class PluginTest extends TestCase
             fn (array $acc, array $error): array => $acc + [ $error['line'] => $error['message'] ],
             []
         );
-    
-        $this->assertEquals($expectedErrors, $actualErrors);
+
+        foreach ($actualErrors as $line => $error) {
+            $this->assertEquals($expectedErrors[$line], $error);
+        }
+
+        foreach (array_diff_assoc($expectedErrors, $actualErrors) as $line => $error) {
+            $this->fail(sprintf("Expected failure %s: %s did not occur", $line, $error));
+        }
     }
 
     /**

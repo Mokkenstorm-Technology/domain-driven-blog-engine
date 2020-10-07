@@ -19,3 +19,7 @@ Collection::from([ new Foo ])->map->value->mapInto(Bar::class)->map->bar()->toAr
 Collection::from([ new Foo ])->filter(fn () : bool => true)->map->foo()->toArray();
 
 Collection::from([ new Foo ])->filter->foo()->map->foo()->toArray();
+
+Collection::from([ new Foo, new Bar ])->map->baz()->toArray();
+
+Collection::from([ new Foo, new Bar ])->map->value->toArray();
