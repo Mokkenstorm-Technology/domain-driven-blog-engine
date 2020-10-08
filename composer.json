@@ -4,8 +4,10 @@
     "type": "project",
     "require-dev": {
         "pestphp/pest": "^0.3.6",
-        "phpstan/phpstan": "^0.12.43",
-        "friendsofphp/php-cs-fixer": "^2.16"
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpstan/phpstan": "^0.12.48",
+        "sustainabil-it/phpstan-higher-order-collections": "dev-main",
+        "phpstan/extension-installer": "^1.0"
     },
     "license": "MIT",
     "authors": [
@@ -15,15 +17,13 @@
         }
     ],
     "scripts": {
-        "test:types": "php vendor/bin/phpstan analyze ./{src,plugin} --level=max",
+        "test:types": "php vendor/bin/phpstan analyze ./src --level=max",
         "test:lint": "php vendor/bin/php-cs-fixer fix",
         "test:domain": "vendor/bin/pest --group=domain",
         "test:coverage": "vendor/bin/pest --coverage --min=90",
-        "test:plugin": "vendor/bin/phpunit --testsuite=Plugin --colors=always",
         "test:unit": "vendor/bin/pest --group=unit",
         "test" : [
             "@test:lint",
-            "@test:plugin",
             "@test:types",
             "@test:coverage"
         ]
@@ -40,8 +40,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "Plugin\\": "plugin/"
+            "Tests\\": "tests/"
         }
     }
 }

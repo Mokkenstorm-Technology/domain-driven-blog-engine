@@ -1,5 +1,3 @@
-includes:
-    - plugin/plugin.neon
 parameters:
     higherOrderCollection:
         collectionClass: App\Infrastructure\Support\Collection
