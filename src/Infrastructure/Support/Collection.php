@@ -8,19 +8,20 @@ use IteratorAggregate;
 use InvalidArgumentException;
 
 /**
+ * @template K
  * @template T
  *
- * @implements IteratorAggregate<int, T>
+ * @implements IteratorAggregate<K, T>
  */
 class Collection implements IteratorAggregate
 {
     /**
-     * @var (callable(): iterable<T>) | iterable<T>
+     * @var (callable(): iterable<K, T>) | iterable<K, T>
      */
     private $source;
 
     /**
-     * @param (callable(): iterable<T>) | iterable<T> $source
+     * @param (callable(): iterable<K, T>) | iterable<K, T> $source
      */
     public function __construct($source = [])
     {
@@ -28,10 +29,11 @@ class Collection implements IteratorAggregate
     }
     
     /**
-     * @template S
+     * @template KS
+     * @template KT
      *
-     * @param (callable(): iterable<S>) | iterable<S> $source
-     * @return Collection<S>
+     * @param (callable(): iterable<KS, KT>) | iterable<KS, KT> $source
+     * @return self<KS, KT>
      */
     public static function from($source = [])
     {
@@ -39,7 +41,7 @@ class Collection implements IteratorAggregate
     }
     
     /**
-     * @return Traversable<T>
+     * @return Traversable<K, T>
      */
     public function getIterator(): Traversable
     {
@@ -49,7 +51,7 @@ class Collection implements IteratorAggregate
     }
 
     /**
-     * @return T[]
+     * @return array<K, T>
      */
     public function toArray(): array
     {
@@ -57,29 +59,37 @@ class Collection implements IteratorAggregate
     }
 
     /**
+     * @return T[]
+     */
+    public function toList(): array
+    {
+        return iterator_to_array($this->values());
+    }
+
+    /**
      * @template S
-     * @param callable(T, int): S $mapper
-     * @return Collection<S>
+     * @param callable(T, K): S $mapper
+     * @return self<K, S>
      */
     public function map(callable $mapper): self
     {
         return new self(function () use ($mapper) {
-            foreach ($this as $index => $element) {
-                yield $mapper($element, $index);
+            foreach ($this as $key => $element) {
+                yield $key => $mapper($element, $key);
             }
         });
     }
 
     /**
-     * @param callable(T, int): bool $filter
-     * @return Collection<T>
+     * @param callable(T, K): bool $filter
+     * @return self<K, T>
      */
     public function filter(callable $filter): self
     {
         return new self(function () use ($filter) {
-            foreach ($this as $index => $element) {
-                if ($filter($element, $index)) {
-                    yield $element;
+            foreach ($this as $key => $element) {
+                if ($filter($element, $key)) {
+                    yield $key => $element;
                 }
             }
         });
@@ -88,14 +98,14 @@ class Collection implements IteratorAggregate
     /**
      * @template S
      *
-     * @param callable(S, T, int | null ): S $reducer
+     * @param callable(S, T, K): S $reducer
      * @param S $initial
      * @return S
      */
     public function reduce(callable $reducer, $initial)
     {
-        foreach ($this as $index => $element) {
-            $initial = $reducer($initial, $element, $index);
+        foreach ($this as $key => $element) {
+            $initial = $reducer($initial, $element, $key);
         }
 
         return $initial;
@@ -105,11 +115,23 @@ class Collection implements IteratorAggregate
      * @template S
      *
      * @param class-string<S> $target
-     * @return Collection<S>
+     * @return self<K, S>
      */
     public function mapInto(string $target)
     {
-        return $this->map(fn ($e) => new $target($e));
+        yield from $this->map(fn ($element, $key) => new $target($element, $key));
+    }
+
+    /**
+     * @return self<int, T>
+     */
+    public function values()
+    {
+        $i = 0;
+
+        foreach ($this as $value) {
+            yield $i++ => $value;
+        }
     }
 
     /**

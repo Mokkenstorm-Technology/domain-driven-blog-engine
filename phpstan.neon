@@ -2,3 +2,6 @@ parameters:
     higherOrderCollection:
         collectionClass: App\Infrastructure\Support\Collection
         proxyClass: App\Infrastructure\Support\HigherOrderCollectionProxy
+        keyTemplate: K 
+        typeTemplate: T 
+        proxyTemplate: S 

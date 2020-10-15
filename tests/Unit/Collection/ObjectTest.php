@@ -16,32 +16,32 @@ $filter = fn (Foo $e): bool => $e->isBa();
 it(
     'should map values using callbacks',
     fn () =>
-    expect($data->map($mapper)->toArray())->toEqual(['Foo: foo', 'Foo: bar', 'Foo: baz'])
+    expect($data->map($mapper)->toList())->toEqual(['Foo: foo', 'Foo: bar', 'Foo: baz'])
 );
 
 it(
     'should map values using methods',
-    fn () => expect($data->map->getFoo()->toArray())->toEqual(['Foo: foo', 'Foo: bar', 'Foo: baz'])
+    fn () => expect($data->map->getFoo()->toList())->toEqual(['Foo: foo', 'Foo: bar', 'Foo: baz'])
 );
 
 it(
     'should map values using properties',
-    fn () => expect($data->map->foo->toArray())->toEqual(['foo', 'bar', 'baz'])
+    fn () => expect($data->map->foo->toList())->toEqual(['foo', 'bar', 'baz'])
 );
 
 it(
     'should filter values using callbacks',
-    fn () => expect($data->filter($filter)->map->foo->toArray())->toEqual(['bar', 'baz'])
+    fn () => expect($data->filter($filter)->map->foo->toList())->toEqual(['bar', 'baz'])
 );
 
 it(
     'should filter values using methods',
-    fn () => expect($data->filter->isBa()->map->foo->toArray())->toEqual(['bar', 'baz'])
+    fn () => expect($data->filter->isBa()->map->foo->toList())->toEqual(['bar', 'baz'])
 );
 
 it(
     'should filter values using properties',
-    fn () => expect($data->filter->getFoo()->map->foo->toArray())->toEqual(['foo', 'bar', 'baz'])
+    fn () => expect($data->filter->getFoo()->map->foo->toList())->toEqual(['foo', 'bar', 'baz'])
 );
 
 class Foo

@@ -7,7 +7,7 @@ use App\Infrastructure\Support\Collection;
 interface Disk
 {
     /**
-     * @return Collection<File>
+     * @return Collection<string, File>
      */
     public function files(string $path = ''): Collection;
     

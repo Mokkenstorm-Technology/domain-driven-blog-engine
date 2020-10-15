@@ -38,7 +38,7 @@ class Container implements ContainerInterface
     {
         $target = $this->getBinding($target);
 
-        $reducer = function (array $args, ? ReflectionType $type) : array {
+        $reducer = function (array $args, ? ReflectionType $type, int $key) : array {
             assert($type instanceof ReflectionNamedType);
 
             /**
@@ -47,15 +47,18 @@ class Container implements ContainerInterface
             $name = $type->getName();
 
             assert($name !== null);
-            
-            return $args + [$this->make($name)];
+
+            return array_merge($args, [$this->make($name)]);
         };
 
-        $args = $this->getConstructorArguments($target)
-            ->map->getType()
-            ->reduce($reducer, []);
+        /**
+         * @var Collection<int, ReflectionType>
+         */
+        $args = $this->getConstructorArguments($target)->map->getType();
 
-        return is_string($target) ? new $target(...$args) : $target(...$args);
+        $argumentList = $args->reduce($reducer, []);
+
+        return is_string($target) ? new $target(...$argumentList) : $target(...$argumentList);
     }
 
     /**
@@ -87,7 +90,7 @@ class Container implements ContainerInterface
 
     /**
      * @param class-string | Closure $target
-     * @return Collection<ReflectionParameter>
+     * @return Collection<int, ReflectionParameter>
      */
     private function getConstructorArguments($target): Collection
     {

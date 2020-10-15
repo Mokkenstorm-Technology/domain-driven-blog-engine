@@ -3,20 +3,21 @@
 namespace App\Infrastructure\Support;
 
 /**
+ * @template K
  * @template T
  * @template S
  */
 class HigherOrderCollectionProxy
 {
     /**
-     * @var Collection<T>
+     * @var Collection<K, T>
      */
     private Collection $collection;
 
     private string $method;
 
     /**
-     * @param Collection<T> $collection
+     * @param Collection<K, T> $collection
      */
     public function __construct(Collection $collection, string $method)
     {

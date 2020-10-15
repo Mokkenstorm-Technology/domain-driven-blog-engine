@@ -11,31 +11,31 @@ $strings  = Collection::from(['foo', 'bar', 'baz']);
 it(
     'should work withouta value',
     fn () =>
-    expect(Collection::from()->toArray())->toEqual([])
+    expect(Collection::from()->toList())->toEqual([])
 );
 
 it(
     'should work with empty arrays',
     fn () =>
-    expect(Collection::from([])->toArray())->toEqual([])
+    expect(Collection::from([])->toList())->toEqual([])
 );
 
 it(
     'should work with generators',
     fn () =>
-    expect(Collection::from(fn () => yield from $integers)->toArray())->toEqual([1, 2, 3])
+    expect(Collection::from(fn () => yield from $integers)->toList())->toEqual([1, 2, 3])
 );
 
 it(
     'should map values',
     fn () =>
-    expect($integers->map(fn ($e) => $e * 2)->toArray())->toEqual([2, 4, 6])
+    expect($integers->map(fn ($e) => $e * 2)->toList())->toEqual([2, 4, 6])
 );
 
 it(
     'should filter values',
     fn () =>
-    expect($integers->filter(fn ($e) => $e % 2)->toArray())->toEqual([1, 3])
+    expect($integers->filter(fn ($e) => $e % 2)->toList())->toEqual([1, 3])
 );
 
 it(

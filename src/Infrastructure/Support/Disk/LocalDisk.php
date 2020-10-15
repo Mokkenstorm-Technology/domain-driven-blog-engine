@@ -17,7 +17,7 @@ class LocalDisk implements Disk
     }
 
     /**
-     * @return Collection<File>
+     * @return Collection<string, File>
      */
     public function files(string $path = ''): Collection
     {
