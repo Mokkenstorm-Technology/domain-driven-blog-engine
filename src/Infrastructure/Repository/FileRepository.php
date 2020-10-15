@@ -42,7 +42,7 @@ abstract class FileRepository implements Repository
         $filter = fn (File $file) : bool => (bool) preg_match("/$this->extension$/", $file->name());
         $mapper = fn (File $file) => $this->entityFromFile($file);
             
-        yield from $this->disk->files($this->location)->filter($filter)->map($mapper);
+        return $this->disk->files($this->location)->filter($filter)->map($mapper);
     }
 
     /**

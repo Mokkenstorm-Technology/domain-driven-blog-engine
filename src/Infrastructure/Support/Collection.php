@@ -112,6 +112,14 @@ class Collection implements IteratorAggregate
     }
 
     /**
+     * @param callable(T, K): mixed $callback
+     */
+    public function each(callable $callback): void
+    {
+        $this->reduce(fn ($acc, $element, $key) => $callback($element, $key), null);
+    }
+
+    /**
      * @template S
      *
      * @param class-string<S> $target
@@ -119,7 +127,7 @@ class Collection implements IteratorAggregate
      */
     public function mapInto(string $target)
     {
-        yield from $this->map(fn ($element, $key) => new $target($element, $key));
+        return $this->map(fn ($element, $key) => new $target($element, $key));
     }
 
     /**

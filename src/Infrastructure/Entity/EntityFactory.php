@@ -4,8 +4,9 @@ namespace App\Infrastructure\Entity;
 
 /**
  * @template T of Entity
+ * @implements Factory<T>
  */
-abstract class EntityFactory
+abstract class EntityFactory implements Factory
 {
     /**
      * @var class-string<T>
