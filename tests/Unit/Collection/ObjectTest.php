@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Collection;
 
-use App\Infrastructure\Support\Collection;
+use App\Infrastructure\Support\Collection\Collection;
 
 $data = Collection::from([
     new Foo('foo'),

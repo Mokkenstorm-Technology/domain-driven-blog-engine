@@ -6,7 +6,9 @@ use App\Infrastructure\Providers\DiskProvider;
 use App\Infrastructure\Providers\ServiceProvider;
 
 use App\Infrastructure\Container\ContainerInterface;
-use App\Infrastructure\Support\Collection;
+use App\Infrastructure\Support\Collection\Collection;
+
+use App\Domain\Post\ServiceProvider as PostServiceProvider;
 
 class App
 {
@@ -14,7 +16,8 @@ class App
      * @var class-string<ServiceProvider>[]
      */
     private array $providers = [
-        DiskProvider::class
+        DiskProvider::class,
+        PostServiceProvider::class,
     ];
 
     private ContainerInterface $container;

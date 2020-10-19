@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Infrastructure\Support;
+namespace App\Infrastructure\Support\Collection;
 
 use Traversable;
 use IteratorAggregate;
+use JsonSerializable;
 
 use InvalidArgumentException;
 
@@ -120,6 +121,18 @@ class Collection implements IteratorAggregate
     }
 
     /**
+     * @param T $item
+     * @return static
+     */
+    public function add($item): self
+    {
+        return new self(function () use ($item) {
+            yield from $this;
+            yield $item;
+        });
+    }
+
+    /**
      * @template S
      *
      * @param class-string<S> $target
@@ -148,5 +161,13 @@ class Collection implements IteratorAggregate
     public function __get(string $name)
     {
         return new HigherOrderCollectionProxy($this, $name);
+    }
+
+    /**
+     * @return array<K, string>
+     */
+    public function jsonSerialize() : array
+    {
+        return $this->map(fn ($e, $i): string => json_encode($e, JSON_THROW_ON_ERROR))->toArray();
     }
 }

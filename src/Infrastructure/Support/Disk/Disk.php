@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Support\Disk;
 
-use App\Infrastructure\Support\Collection;
+use App\Infrastructure\Support\Collection\Collection;
 
 interface Disk
 {

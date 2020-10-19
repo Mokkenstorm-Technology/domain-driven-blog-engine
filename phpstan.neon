@@ -1,7 +1,7 @@
 parameters:
     higherOrderCollection:
-        collectionClass: App\Infrastructure\Support\Collection
-        proxyClass: App\Infrastructure\Support\HigherOrderCollectionProxy
+        collectionClass: App\Infrastructure\Support\Collection\Collection
+        proxyClass: App\Infrastructure\Support\Collection\HigherOrderCollectionProxy
         keyTemplate: K 
         typeTemplate: T 
         proxyTemplate: S 

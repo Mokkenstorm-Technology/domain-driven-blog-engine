@@ -5,6 +5,8 @@ namespace App\Domain\Post;
 use App\Infrastructure\Entity\Entity;
 use App\Infrastructure\Entity\EntityId;
 
+use App\Infrastructure\Support\Collection\Collection;
+
 class Post extends Entity
 {
     protected string $title;

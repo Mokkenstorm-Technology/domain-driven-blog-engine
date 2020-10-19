@@ -12,7 +12,7 @@ use ReflectionNamedType;
 use ReflectionFunction;
 use ReflectionParameter;
 
-use App\Infrastructure\Support\Collection;
+use App\Infrastructure\Support\Collection\Collection;
 
 class Container implements ContainerInterface
 {

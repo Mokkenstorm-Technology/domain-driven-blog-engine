@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Collection;
 
-use App\Infrastructure\Support\Collection;
+use App\Infrastructure\Support\Collection\Collection;
 
 $integers = Collection::from([1, 2, 3]);
 

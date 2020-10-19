@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Support;
+namespace App\Infrastructure\Support\Collection;
 
 /**
  * @template K
