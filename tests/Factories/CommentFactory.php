@@ -2,9 +2,9 @@
 
 namespace Tests\Factories;
 
-use App\Domain\Post\PostFactory as BaseFactory;
+use App\Domain\Post\CommentFactory as BaseFactory;
 
-class PostFactory extends TestFactory
+class CommentFactory extends TestFactory
 {
     public function __construct(BaseFactory $factory)
     {
@@ -14,7 +14,7 @@ class PostFactory extends TestFactory
     protected function fakeData(array $data): array
     {
         return [
-            'title' => 'Test Title'
+            'content' => 'Iorem Ipsum'
         ];
     }
 }

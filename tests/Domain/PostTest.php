@@ -3,20 +3,13 @@
 namespace Tests\Domain;
 
 use App\Domain\Post\Post;
-use App\Domain\Post\PostRepository;
+use App\Domain\Post\Comment;
 
 use App\Infrastructure\Entity\EntityId;
 use App\Infrastructure\Exception\NotFound;
 
-use Tests\Factories\PostFactory;
-
-beforeEach(function () {
-    $this->registerFactory(Post::class, PostFactory::class);
-    $this->registerRepository(Post::class, PostRepository::class);
-});
-
 it('should be able to create posts', function () {
-    $post = $this->create(Post::class);
+    $post = $this->make(Post::class);
 
     $this->assertTrue($this->repository(Post::class)->find($post->getId())->equals($post));
 });

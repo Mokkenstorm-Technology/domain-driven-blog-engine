@@ -12,12 +12,28 @@ trait CreatesEntities
      * @var array<class-string<Entity>, class-string<Factory>>
      */
     private array $factories = [];
-    
+
     /**
      * @var array<class-string<Entity>, class-string<Repository>>
      */
     private array $repositories = [];
-    
+
+    /**
+     *
+     */
+    protected function setupCreatesEntities(): void
+    {
+        foreach (require(__DIR__ . '/../Factories/.bindings.php') as $entity => $binding) {
+            if (isset($binding['factory'])) {
+                $this->registerFactory($entity, $binding['factory']);
+            }
+
+            if (isset($binding['repository'])) {
+                $this->registerRepository($entity, $binding['repository']);
+            }
+        }
+    }
+
     /**
      * @template T of Entity
      *
@@ -27,7 +43,7 @@ trait CreatesEntities
      */
     protected function create(string $class, array $data = []): Entity
     {
-        return $this->repository($class)->save($this->factory($class)->create($data));
+        return $this->repository($class)->save($this->make($class, $data));
     }
 
     /**
@@ -43,7 +59,18 @@ trait CreatesEntities
     }
 
     /**
-     * @tempalte T of Entity
+     * @template T of Entity
+     *
+     * @param class-string<T> $class
+     * @return Repository<T>
+     */
+    protected function repository(string $class): Repository
+    {
+        return $this->app->make($this->repositories[$class]);
+    }
+
+    /**
+     * @template T of Entity
      *
      * @param class-string<T> $class
      * @return Factory<T>
@@ -59,20 +86,9 @@ trait CreatesEntities
      * @param class-string<T> $class
      * @param class-string<Factory<T>> $factory
      */
-    public function registerFactory(string $class, string $factory): void
+    protected function registerFactory(string $class, string $factory): void
     {
         $this->factories[$class] = $factory;
-    }
-
-    /**
-     * @tempalte T of Entity
-     *
-     * @param class-string<T> $class
-     * @return Repository<T>
-     */
-    protected function repository(string $class): Repository
-    {
-        return $this->app->make($this->repositories[$class]);
     }
 
     /**
@@ -81,7 +97,7 @@ trait CreatesEntities
      * @param class-string<T> $class
      * @param class-string<Repository<T>> $repository
      */
-    public function registerRepository(string $class, $repository): void
+    protected function registerRepository(string $class, $repository): void
     {
         $this->repositories[$class] = $repository;
     }
