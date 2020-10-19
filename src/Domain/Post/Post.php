@@ -9,14 +9,48 @@ use App\Infrastructure\Support\Collection\Collection;
 
 class Post extends Entity
 {
-    protected string $title;
+    protected PostTitle $title;
 
-    protected array $fields = ['id', 'title'];
+    /**
+     * @var Collection<int, Comment>
+     */
+    protected Collection $comments;
 
-    public function __construct(EntityId $id, string $title)
-    {
+    /**
+     * @var string[]
+     */
+    protected array $fields = [
+        'id',
+        'title',
+        'comments'
+    ];
+
+    /**
+     * @param Collection<int, Comment> $comments
+     */
+    public function __construct(
+        EntityId $id,
+        PostTitle $title,
+        Collection $comments
+    ) {
         parent::__construct($id);
 
-        $this->title = $title;
+        $this->title    = $title;
+        $this->comments = $comments;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function comments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        $this->comments = $this->comments->add($comment);
+
+        return $this;
     }
 }

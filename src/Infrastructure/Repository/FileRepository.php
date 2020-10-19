@@ -4,6 +4,7 @@ namespace App\Infrastructure\Repository;
 
 use App\Infrastructure\Entity\Entity;
 use App\Infrastructure\Entity\EntityId;
+use App\Infrastructure\Entity\Factory;
 
 use App\Infrastructure\Exception\NotFound;
 use App\Infrastructure\Support\Disk\Disk;
@@ -22,16 +23,20 @@ abstract class FileRepository implements Repository
 
     protected string $location;
 
-    /**
-     * @var class-string<T>
-     */
-    protected string $entityClass;
-
     protected Disk $disk;
 
-    public function __construct(Disk $disk)
+    /**
+     * @var Factory<T>
+     */
+    protected Factory $factory;
+
+    /**
+     * @param Factory<T> $factory
+     */
+    public function __construct(Factory $factory, Disk $disk)
     {
-        $this->disk = $disk;
+        $this->factory  = $factory;
+        $this->disk     = $disk;
     }
 
     /**
@@ -40,6 +45,7 @@ abstract class FileRepository implements Repository
     public function all(): Traversable
     {
         $filter = fn (File $file) : bool => (bool) preg_match("/$this->extension$/", $file->name());
+
         $mapper = fn (File $file) => $this->entityFromFile($file);
             
         return $this->disk->files($this->location)->filter($filter)->map($mapper);
@@ -79,10 +85,6 @@ abstract class FileRepository implements Repository
      */
     private function entityFromFile(File $file): Entity
     {
-        $data = json_decode($file->content(), true);
-
-        $class = $this->entityClass;
-
-        return new $class(EntityId::make($data['id']), $data['title']);
+        return $this->factory->make(json_decode($file->content(), true, JSON_THROW_ON_ERROR));
     }
 }

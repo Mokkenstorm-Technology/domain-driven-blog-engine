@@ -2,6 +2,8 @@
 
 namespace App\Infrastructure\Entity;
 
+use App\Infrastructure\Support\Collection\Collection;
+
 /**
  * @template T of Entity
  * @implements Factory<T>
@@ -9,27 +11,21 @@ namespace App\Infrastructure\Entity;
 abstract class EntityFactory implements Factory
 {
     /**
-     * @var class-string<T>
-     */
-    protected string $entityClass;
-    
-    /**
      * @param array<mixed> $data
      * @return T
      */
-    public function create(array $data = []): Entity
-    {
-        return $this->make(array_merge($data, ['id' => EntityId::create()]));
-    }
+    abstract public function make(array $data = []): Entity;
 
     /**
-     * @param array<mixed> $data
-     * @return T
+     * @template S of Entity
+     *
+     * @param Factory<S>    $factory
+     * @param array<mixed>  $data
+     *
+     * @return Collection<int, S>
      */
-    public function make(array $data = []): Entity
+    protected function children(Factory $factory, array $data): Collection
     {
-        $class = $this->entityClass;
-
-        return new $class($data['id'], $data['title']);
+        return Collection::from(array_values(array_map([$factory, 'make'], $data)));
     }
 }

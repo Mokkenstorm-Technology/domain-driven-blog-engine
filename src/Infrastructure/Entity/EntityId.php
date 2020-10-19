@@ -2,12 +2,8 @@
 
 namespace App\Infrastructure\Entity;
 
-use JsonSerializable;
-
-class EntityId implements JsonSerializable
+class EntityId extends ValueObject
 {
-    private string $value;
-
     private function __construct(string $value)
     {
         $this->value = $value;
@@ -21,15 +17,5 @@ class EntityId implements JsonSerializable
     public static function make(string $value): self
     {
         return new self($value);
-    }
-
-    public function jsonSerialize()
-    {
-        return $this->value;
-    }
-
-    public function __toString()
-    {
-        return (string) $this->value;
     }
 }

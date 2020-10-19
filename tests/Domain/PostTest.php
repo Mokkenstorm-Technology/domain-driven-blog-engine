@@ -23,5 +23,19 @@ it('should fail on unknown posts', function () {
 })->throws(NotFound::class);
 
 it('should fail on unsaved posts', function () {
-    $this->repository(Post::class)->find($this->factory(Post::class)->create(['title' => 'Test Title'])->getId());
+    $this->repository(Post::class)->find($this->make(Post::class)->getId());
 })->throws(NotFound::class);
+
+it('should not have any comments by default', function () {
+    $this->assertCount(0, $this->make(Post::class)->comments());
+});
+
+it('should be able to add comments to a post', function () {
+    $post = $this->make(Post::class);
+
+    $this->assertCount(0, $post->comments());
+    
+    $post->addComment($this->make(Comment::class));
+
+    $this->assertCount(1, $post->comments());
+})->only();
