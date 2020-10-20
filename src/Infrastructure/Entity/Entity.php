@@ -26,7 +26,7 @@ abstract class Entity implements JsonSerializable
     public function jsonSerialize()
     {
         return array_reduce(
-            $this->fields,
+            array_merge($this->fields, ['id']),
             fn (array $accumulator, string $field): array =>
                 $accumulator + [ $field => $this->{$field} ],
             []

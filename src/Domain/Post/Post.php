@@ -20,7 +20,6 @@ class Post extends Entity
      * @var string[]
      */
     protected array $fields = [
-        'id',
         'title',
         'comments'
     ];

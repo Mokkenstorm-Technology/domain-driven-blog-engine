@@ -5,6 +5,7 @@ namespace App\Infrastructure\Support\Collection;
 use Traversable;
 use IteratorAggregate;
 use JsonSerializable;
+use Countable;
 
 use InvalidArgumentException;
 
@@ -122,14 +123,14 @@ class Collection implements IteratorAggregate, JsonSerializable
 
     /**
      * @param T $item
-     * @return static
+     * @return self<int, T>
      */
     public function add($item): self
     {
-        return new self(function () use ($item) {
+        return (new self(function () use ($item) {
             yield from $this;
             yield $item;
-        });
+        }))->values();
     }
 
     /**
@@ -148,11 +149,11 @@ class Collection implements IteratorAggregate, JsonSerializable
      */
     public function values()
     {
-        $i = 0;
-
-        foreach ($this as $value) {
-            yield $i++ => $value;
-        }
+        return new self(function () {
+            foreach ($this as $value) {
+                yield $value;
+            }
+        });
     }
 
     /**
@@ -168,11 +169,6 @@ class Collection implements IteratorAggregate, JsonSerializable
      */
     public function jsonSerialize() : array
     {
-        /**
-         * @var callable(T,K): (int | string)
-         */
-        $encoder = fn ($e, $i) => $e instanceof JsonSerializable ? json_encode($e, JSON_THROW_ON_ERROR) : $e;
-        
-        return $this->map($encoder)->toArray();
+        return $this->toArray();
     }
 }

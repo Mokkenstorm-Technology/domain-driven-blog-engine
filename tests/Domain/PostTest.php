@@ -39,3 +39,16 @@ it('should be able to add comments to a post', function () {
 
     $this->assertCount(1, $post->comments());
 });
+
+it('should be to save a post with comments', function () {
+    $this->save(
+        $post = $this->make(Post::class)
+                     ->addComment($this->make(Comment::class))
+                     ->addComment($this->make(Comment::class))
+    );
+
+    $fetched = $this->find(Post::class, $post->getId());
+
+    $this->assertInstanceOf(Post::class, $fetched);
+    $this->assertCount(2, $fetched->comments());
+});
