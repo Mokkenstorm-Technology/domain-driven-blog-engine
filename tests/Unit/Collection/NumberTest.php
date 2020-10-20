@@ -69,3 +69,8 @@ it(
     'should serialize to json correctly',
     fn () => expect(json_encode($integers))->toEqual("[1,2,3]")
 );
+
+it(
+    'should be able to concatenate correctly',
+    fn () => expect(Collection::from([1])->add(2)->add(3)->toArray())->toEqual([1,2,3])
+);

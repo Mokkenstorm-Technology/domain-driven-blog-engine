@@ -4,6 +4,7 @@ namespace Tests\Concerns;
 
 use App\Infrastructure\Repository\Repository;
 use App\Infrastructure\Entity\Entity;
+use App\Infrastructure\Entity\EntityId;
 use App\Infrastructure\Entity\Factory;
 
 trait CreatesEntities
@@ -18,9 +19,6 @@ trait CreatesEntities
      */
     private array $repositories = [];
 
-    /**
-     *
-     */
     protected function setupCreatesEntities(): void
     {
         foreach (require(__DIR__ . '/../Factories/.bindings.php') as $entity => $binding) {
@@ -56,6 +54,22 @@ trait CreatesEntities
     protected function make(string $class, array $data = []): Entity
     {
         return $this->factory($class)->make($data);
+    }
+
+    protected function save(Entity $entity): void
+    {
+        $this->repository(get_class($entity))->save($entity);
+    }
+
+    /**
+     * @template T of Entity
+     *
+     * @param class-string<T>
+     * @return T
+     */
+    protected function find(string $class, EntityId $id): Entity
+    {
+        return $this->repository($class)->find($id);
     }
 
     /**
