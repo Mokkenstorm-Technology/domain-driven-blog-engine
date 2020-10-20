@@ -14,7 +14,7 @@ use InvalidArgumentException;
  *
  * @implements IteratorAggregate<K, T>
  */
-class Collection implements IteratorAggregate
+class Collection implements IteratorAggregate, JsonSerializable
 {
     /**
      * @var (callable(): iterable<K, T>) | iterable<K, T>
@@ -164,10 +164,15 @@ class Collection implements IteratorAggregate
     }
 
     /**
-     * @return array<K, string>
+     * @return array<K, int | string>
      */
     public function jsonSerialize() : array
     {
-        return $this->map(fn ($e, $i): string => json_encode($e, JSON_THROW_ON_ERROR))->toArray();
+        /**
+         * @var callable(T,K): (int | string)
+         */
+        $encoder = fn ($e, $i) => $e instanceof JsonSerializable ? json_encode($e, JSON_THROW_ON_ERROR) : $e;
+        
+        return $this->map($encoder)->toArray();
     }
 }
