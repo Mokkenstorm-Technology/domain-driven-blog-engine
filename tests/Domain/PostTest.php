@@ -9,7 +9,7 @@ use App\Infrastructure\Entity\EntityId;
 use App\Infrastructure\Exception\NotFound;
 
 it('should be able to create posts', function () {
-    $post = $this->make(Post::class);
+    $post = $this->create(Post::class);
 
     $this->assertTrue($this->repository(Post::class)->find($post->getId())->equals($post));
 });
@@ -38,4 +38,4 @@ it('should be able to add comments to a post', function () {
     $post->addComment($this->make(Comment::class));
 
     $this->assertCount(1, $post->comments());
-})->only();
+});

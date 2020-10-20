@@ -55,3 +55,17 @@ it(
         ->reduce(fn (int $sum, int $e): int => $sum + $e, 0)
     )->toEqual(6)
 );
+
+it(
+    'should convert to maps correctly',
+    fn () => expect(
+        Collection::from(['foo' => 1, 'bar' => 2, 'baz' => 3])
+            ->filter(fn (int $e, string $key): bool => $key !== 'bar')
+            ->toArray()
+    )->toEqual(['foo' => 1, 'baz' => 3])
+);
+
+it(
+    'should serialize to json correctly',
+    fn () => expect(json_encode($integers))->toEqual("[1,2,3]")
+);
