@@ -15,27 +15,36 @@ class Post extends Entity
      * @var Collection<int, Comment>
      */
     protected Collection $comments;
+    
+    /**
+     * @var Collection<int, Category>
+     */
+    protected Collection $categories;
 
     /**
      * @var string[]
      */
     protected array $fields = [
         'title',
-        'comments'
+        'comments',
+        'categories'
     ];
 
     /**
      * @param Collection<int, Comment> $comments
+     * @param Collection<int, Category> $categories
      */
     public function __construct(
         EntityId $id,
         PostTitle $title,
-        Collection $comments
+        Collection $comments,
+        Collection $categories
     ) {
         parent::__construct($id);
 
-        $this->title    = $title;
-        $this->comments = $comments;
+        $this->title        = $title;
+        $this->comments     = $comments;
+        $this->categories   = $categories;
     }
 
     /**
@@ -46,9 +55,24 @@ class Post extends Entity
         return $this->comments;
     }
 
+    /**
+     * @return Collection<int, Category>
+     */
+    public function categories(): Collection
+    {
+        return $this->categories;
+    }
+
     public function addComment(Comment $comment): self
     {
         $this->comments = $this->comments->add($comment);
+
+        return $this;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        $this->categories = $this->categories->add($category);
 
         return $this;
     }

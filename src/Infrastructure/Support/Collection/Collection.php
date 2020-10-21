@@ -5,7 +5,6 @@ namespace App\Infrastructure\Support\Collection;
 use Traversable;
 use IteratorAggregate;
 use JsonSerializable;
-use Countable;
 
 use InvalidArgumentException;
 
