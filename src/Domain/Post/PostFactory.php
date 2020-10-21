@@ -12,10 +12,13 @@ use App\Infrastructure\Entity\EntityId;
 class PostFactory extends EntityFactory
 {
     private CommentFactory $comments;
+    
+    private CategoryFactory $categories;
 
-    public function __construct(CommentFactory $comments)
+    public function __construct(CommentFactory $comments, CategoryFactory $categories)
     {
-        $this->comments = $comments;
+        $this->comments     = $comments;
+        $this->categories   = $categories;
     }
 
     /**
@@ -27,7 +30,8 @@ class PostFactory extends EntityFactory
         return new Post(
             isset($data['id']) ? EntityId::make($data['id']) : EntityId::create(),
             PostTitle::from($data['title']),
-            $this->children($this->comments, $data['comments'] ?? [])
+            $this->children($this->comments, $data['comments'] ?? []),
+            $this->children($this->categories, $data['categories'] ?? [])
         );
     }
 }

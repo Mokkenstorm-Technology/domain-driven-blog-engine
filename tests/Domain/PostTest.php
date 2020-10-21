@@ -3,6 +3,7 @@
 namespace Tests\Domain;
 
 use App\Domain\Post\Post;
+use App\Domain\Post\Category;
 use App\Domain\Post\Comment;
 
 use App\Infrastructure\Entity\EntityId;
@@ -15,7 +16,7 @@ it('should be able to create posts', function () {
 });
 
 it('should be able to fetch all posts', function () {
-    $this->repository(Post::class)->all()->each(fn ($post) => $this->assertInstanceOf(Post::class, $post));
+    $this->assertContainsOnlyInstancesOf(Post::class, $this->repository(Post::class)->all());
 });
 
 it('should fail on unknown posts', function () {
@@ -34,21 +35,35 @@ it('should be able to add comments to a post', function () {
     $post = $this->make(Post::class);
 
     $this->assertCount(0, $post->comments());
-    
+
     $post->addComment($this->make(Comment::class));
 
     $this->assertCount(1, $post->comments());
 });
 
 it('should be to save a post with comments', function () {
-    $this->save(
-        $post = $this->make(Post::class)
-                     ->addComment($this->make(Comment::class))
-                     ->addComment($this->make(Comment::class))
-    );
+    $post = $this->make(Post::class)
+                 ->addComment($this->make(Comment::class))
+                 ->addComment($this->make(Comment::class));
+
+    $this->save($post);
 
     $fetched = $this->find(Post::class, $post->getId());
 
     $this->assertInstanceOf(Post::class, $fetched);
+    $this->assertContainsOnlyInstancesOf(Comment::class, $fetched->comments());
     $this->assertCount(2, $fetched->comments());
+});
+
+it('should be able to have a category', function () {
+    $post = $this->make(Post::class)
+                 ->addCategory($this->make(Category::class));
+
+    $this->save($post);
+
+    $fetched = $this->find(Post::class, $post->getId());
+
+    $this->assertInstanceOf(Post::class, $fetched);
+    $this->assertContainsOnlyInstancesOf(Category::class, $fetched->categories());
+    $this->assertCount(1, $fetched->categories());
 });
