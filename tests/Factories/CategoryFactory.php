@@ -6,12 +6,15 @@ use App\Domain\Post\CategoryFactory as BaseFactory;
 
 class CategoryFactory extends TestFactory
 {
-    public function __construct(BaseFactory $factory)
-    {
-        $this->factory = $factory;
-    }
+    /**
+    * @var class-string<Factory<T>>
+    */
+    protected string $factoryClass = BaseFactory::class;
 
-    protected function fakeData(array $data): array
+    /**
+     * @return array<string, mixed>
+     */
+    protected function fakeData(): array
     {
         return [
             'name' => 'Test Category'
