@@ -30,9 +30,10 @@ class App
     public function boot(): void
     {
         Collection::from($this->providers)
-            ->map(fn ($e) : ServiceProvider => new $e)
-            ->map->register($this->container)
-            ->toArray();
+            ->map(fn (string $e) : ServiceProvider => new $e)
+            ->each(function (ServiceProvider $provider) {
+                $provider->register($this->container);
+            });
     }
 
     /**

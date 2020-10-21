@@ -6,12 +6,15 @@ use App\Domain\Post\CommentFactory as BaseFactory;
 
 class CommentFactory extends TestFactory
 {
-    public function __construct(BaseFactory $factory)
-    {
-        $this->factory = $factory;
-    }
+    /**
+     * @var class-string<Factory<T>>
+     */
+    protected string $factoryClass = BaseFactory::class;
 
-    protected function fakeData(array $data): array
+    /**
+     * @return array<string, mixed>
+     */
+    protected function fakeData(): array
     {
         return [
             'content' => 'Iorem Ipsum'
