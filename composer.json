@@ -19,11 +19,12 @@
     "scripts": {
         "test:types": "php vendor/bin/phpstan analyze ./src --level=max",
         "test:lint": "php vendor/bin/php-cs-fixer fix",
+        "test:lint-check": "php vendor/bin/php-cs-fixer fix --dry-run",
         "test:domain": "vendor/bin/pest --group=domain",
         "test:coverage": "vendor/bin/pest --coverage --min=90",
         "test:unit": "vendor/bin/pest --group=unit",
         "test" : [
-            "@test:lint",
+            "@test:lint-check",
             "@test:types",
             "@test:coverage"
         ]
