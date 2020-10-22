@@ -11,6 +11,7 @@ use App\Infrastructure\Support\Disk\Disk;
 use App\Infrastructure\Support\Disk\File;
 use App\Infrastructure\Support\Disk\FileAccessException;
 
+use JsonException;
 use Traversable;
 
 /**
@@ -58,7 +59,7 @@ abstract class FileRepository implements Repository
     {
         try {
             return $this->entityFromFile($this->disk->file($this->file($id)));
-        } catch (FileAccessException $e) {
+        } catch (FileAccessException | JsonException $e) {
             throw new NotFound;
         }
     }
@@ -68,7 +69,7 @@ abstract class FileRepository implements Repository
      */
     public function save(Entity $post): Entity
     {
-        assert(($contents = json_encode($post)) !== false);
+        $contents = json_encode($post, JSON_THROW_ON_ERROR);
 
         $this->disk->save($this->file($post->getId()), $contents);
         
